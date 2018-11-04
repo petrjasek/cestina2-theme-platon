@@ -2,7 +2,14 @@
 $lekce = cestina_lekce($node);
 ?>
 
+<script>
+var metapathConfig = <?php print json_encode(cesta_metapath_config($lekce, $directory)); ?>;
+</script>
+
 <div class='<?php print $classes ?> clearfix' <?php print ($attributes) ?>>
+
+    <meta-path config="metapathConfig" startindex="0" redirect="true"></meta-path>
+
 
   <?php foreach($lekce as $l) { ?>
 
@@ -36,3 +43,7 @@ $lekce = cestina_lekce($node);
 
 </div>
 
+<script type="text/javascript" src="<?php print cesta_dist('runtime.*.js', $directory); ?>"></script>
+<script type="text/javascript" src="<?php print cesta_dist('polyfills.*.js', $directory); ?>"></script>
+<script type="text/javascript" src="<?php print cesta_dist('scripts.*.js', $directory); ?>"></script>
+<script type="text/javascript" src="<?php print cesta_dist('main.*.js', $directory); ?>"></script>

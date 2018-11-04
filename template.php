@@ -886,3 +886,84 @@ function cestina_ukoly_vse($tema) {
 
     return $ukoly;
 }
+
+const CESTA_DIST = '/node_modules/metaPathComponentDist/dist/elementsApp/';
+
+function cesta_dist($pattern, $directory) {
+    $dist = '/node_modules/metaPathComponentDist/dist/elementsApp/';
+    foreach(glob(dirname(__file__) . CESTA_DIST. $pattern) as $file) {
+        return base_path() . $directory . CESTA_DIST . basename($file);
+    }
+}
+
+function cesta_asset($path, $directory) {
+    return base_path() . $directory . CESTA_DIST . '/assets/' . $path;
+}
+
+function cesta_metapath_config($lekce, $dir) {
+    $pathpoints = array();
+
+    foreach ($lekce as $l) {
+        foreach (cestina_cviceni($l) as $c) {
+            $ukoly = cestina_ukoly($c);
+            $first = array_keys($ukoly)[0];
+            $pathpoints[] = array(
+                'type' => 'default',
+                'url' => url('node/' . $ukoly[$first]->nid),
+            );
+        }
+    }
+
+    return array(
+        'pathId' => 'seznamovani',
+
+        'backgroundImageUrl' => cesta_asset('/scene/pastva/pastva-bg.jpg', $dir),
+        'playerAnimationUrl' => cesta_asset('/scene/pastva/player.png', $dir),
+
+        'path' => array(
+            'color' => '#d8bcb0',
+            'outline' => '#89756e',
+            'pinNext' => '#d8d16b',
+            'pinPrev' => '#7a8868',
+            'pinCurrent' => '#d88e55',
+        ),
+
+        'layers' => array(
+            array(
+                'layer' => 'butterfly',
+                'asset' => cesta_asset('/tmp/sprite150.jpg', $dir),
+                'anim' => 'left-right',
+                'position' => array('x' => 0, 'y' => 600),
+            ),
+            array(
+                'layer' => 'butterfly',
+                'asset' => cesta_asset('/tmp/sprite3x150.png', $dir),
+                'anim' => 'right-left',
+                'spriteanim' => true,
+            ),
+            array(
+                'layer' => 'butterfly',
+                'asset' => cesta_asset('/tmp/sprite3x150.jpg', $dir),
+                'anim' => 'none',
+                'position' => array('x' => 200, 'y' => 400),
+                'spriteanim' => true,
+            ),
+            array(
+                'layer' => 'butterfly',
+                'asset' => cesta_asset('/tmp/sprite3x150.jpg', $dir),
+                'anim' => 'left-blip',
+                'position' => array('y' => 400),
+                'spriteanim' => true,
+            ),
+            array(
+                'layer' => 'butterfly',
+                'asset' => cesta_asset('/tmp/sprite3x150.jpg', $dir),
+                'anim' => 'right-blip',
+                'position' => array('y' => 200),
+                'spriteanim' => true,
+            ),
+        ),
+
+        'pathpoints' => $pathpoints,
+    );
+}
