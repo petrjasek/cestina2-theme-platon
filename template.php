@@ -904,13 +904,15 @@ function cesta_metapath_config($lekce, $dir) {
     $pathpoints = array();
 
     foreach ($lekce as $l) {
+        $start = true;
         foreach (cestina_cviceni($l) as $c) {
             $ukoly = cestina_ukoly($c);
             $first = array_keys($ukoly)[0];
             $pathpoints[] = array(
-                'type' => 'default',
+                'type' => $start ? 'test' : 'default',
                 'url' => url('node/' . $ukoly[$first]->nid),
             );
+            $start = false;
         }
     }
 
@@ -929,39 +931,6 @@ function cesta_metapath_config($lekce, $dir) {
         ),
 
         'layers' => array(
-            array(
-                'layer' => 'butterfly',
-                'asset' => cesta_asset('/tmp/sprite150.jpg', $dir),
-                'anim' => 'left-right',
-                'position' => array('x' => 0, 'y' => 600),
-            ),
-            array(
-                'layer' => 'butterfly',
-                'asset' => cesta_asset('/tmp/sprite3x150.png', $dir),
-                'anim' => 'right-left',
-                'spriteanim' => true,
-            ),
-            array(
-                'layer' => 'butterfly',
-                'asset' => cesta_asset('/tmp/sprite3x150.jpg', $dir),
-                'anim' => 'none',
-                'position' => array('x' => 200, 'y' => 400),
-                'spriteanim' => true,
-            ),
-            array(
-                'layer' => 'butterfly',
-                'asset' => cesta_asset('/tmp/sprite3x150.jpg', $dir),
-                'anim' => 'left-blip',
-                'position' => array('y' => 400),
-                'spriteanim' => true,
-            ),
-            array(
-                'layer' => 'butterfly',
-                'asset' => cesta_asset('/tmp/sprite3x150.jpg', $dir),
-                'anim' => 'right-blip',
-                'position' => array('y' => 200),
-                'spriteanim' => true,
-            ),
         ),
 
         'pathpoints' => $pathpoints,

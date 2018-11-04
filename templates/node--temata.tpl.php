@@ -10,7 +10,6 @@ var metapathConfig = <?php print json_encode(cesta_metapath_config($lekce, $dire
 
     <meta-path config="metapathConfig" startindex="0" redirect="true"></meta-path>
 
-
   <?php foreach($lekce as $l) { ?>
 
   <h2>Lekce: <?php print $l->title; ?></h2>
