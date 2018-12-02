@@ -852,17 +852,26 @@ function cestina_lekce_pro_cviceni($cviceni) {
     return node_load($cviceni->field_lekceref[LANGUAGE_NONE][0]['target_id']);
 }
 
+function weight_compare($a, $b) {
+    if ($a->weight_weight === $b->weight_weight) {
+        return 0;
+    }
+
+    return ($a->weight_weight > $b->weight_weight) ? -1 : 1;
+}
+
 function cestina_ukoly($cviceni) {
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'h5p_content')
-        ->fieldCondition('field_cviceni', 'target_id', $cviceni->nid)
-        ->propertyOrderBy('title');
+        ->fieldCondition('field_cviceni', 'target_id', $cviceni->nid);
 
     try {
         $result = $query->execute();
         if (isset($result['node'])) {
             $items = entity_load('node', array_keys($result['node']));
+            $items = array_values($items);
+            usort($items, weight_compare);
             return $items;
         }
     } catch (Exception $e) {
@@ -872,6 +881,18 @@ function cestina_ukoly($cviceni) {
 
 function cestina_cviceni_pro_ukol($ukol) {
     return node_load($ukol->field_cviceni[LANGUAGE_NONE][0]['target_id']);
+}
+
+function cestina_path($tema) {
+    $path = [];
+    foreach(cestina_lekce($tema) as $l) {
+        $path[] = $l;
+        foreach(cestina_cviceni($l) as $c) {
+            $path[] = $c;
+        }
+    }
+
+    return $path;
 }
 
 function cestina_ukoly_vse($tema) {
@@ -900,20 +921,33 @@ function cesta_asset($path, $directory) {
     return base_path() . $directory . CESTA_DIST . '/assets/' . $path;
 }
 
-function cesta_metapath_config($lekce, $dir) {
+function print_json($data) {
+    print(json_encode($data, JSON_PRETTY_PRINT));
+}
+
+function cesta_metapath_config($tema, $lekce, $dir) {
     $pathpoints = array();
 
-    foreach ($lekce as $l) {
-        $start = true;
-        foreach (cestina_cviceni($l) as $c) {
-            $ukoly = cestina_ukoly($c);
-            $first = array_keys($ukoly)[0];
-            $pathpoints[] = array(
-                'type' => $start ? 'test' : 'default',
-                'url' => url('node/' . $ukoly[$first]->nid),
-            );
-            $start = false;
+    $first = true;
+    foreach(cestina_path($tema) as $p) {
+        if ($first) {
+            $first = false;
+            continue;
         }
+
+        $url = url('node/' . $p->nid);
+
+        if ($p->type === 'cviceni') { // pro cviceni vyber prvni ukol
+            $ukoly = cestina_ukoly($p);
+            $url = url('node/' . $ukoly[0]->nid);
+        } else {
+            // konec lekce by mel byt test
+        }
+
+        $pathpoints[] = array(
+            'type' => $p->type === 'lekce' ? 'test' : 'default',
+            'url' => $url,
+        );
     }
 
     return array(

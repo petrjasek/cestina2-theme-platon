@@ -3,7 +3,7 @@ $lekce = cestina_lekce($node);
 ?>
 
 <script>
-var metapathConfig = <?php print json_encode(cesta_metapath_config($lekce, $directory)); ?>;
+var metapathConfig = <?php print json_encode(cesta_metapath_config($node, $lekce, $directory)); ?>;
 </script>
 
 <div class='<?php print $classes ?> clearfix' <?php print ($attributes) ?>>
