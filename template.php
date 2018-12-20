@@ -909,6 +909,7 @@ function cestina_ukoly_vse($tema) {
 }
 
 const CESTA_DIST = '/node_modules/metaPathComponentDist/dist/elementsApp/';
+const UKOLY_USER_KEY = 'cestina_ukoly';
 
 function cesta_dist($pattern, $directory) {
     $dist = '/node_modules/metaPathComponentDist/dist/elementsApp/';
@@ -926,27 +927,62 @@ function print_json($data) {
 }
 
 function cesta_metapath_config($tema, $lekce, $dir) {
+    global $user;
+
     $pathpoints = array();
+    $ukoly_done = isset($user->data[UKOLY_USER_KEY]) ? json_decode($user->data[UKOLY_USER_KEY], true) : array();
 
-    $first = true;
+    $lekce = null;
     foreach(cestina_path($tema) as $p) {
-        if ($first) {
-            $first = false;
-            continue;
-        }
+        $url = null;
+        $done = false;
 
-        $url = url('node/' . $p->nid);
-
-        if ($p->type === 'cviceni') { // pro cviceni vyber prvni ukol
+        if ($p->type === 'cviceni') { // pro cviceni vyber prvni nehotovy ukol
             $ukoly = cestina_ukoly($p);
-            $url = url('node/' . $ukoly[0]->nid);
-        } else {
-            // konec lekce by mel byt test
+            foreach ($ukoly as $ukol) {
+                if (isset($ukoly_done[$ukol->nid])) {
+                    continue;
+                }
+
+                $url = url('node/' . $ukol->nid);
+                break;
+            }
+
+            if ($url === null) { // vsechny ukoly hotove
+              $url = url('node/' . $ukoly[0]->nid);
+              $done = true;
+            }
+        } else { // zacatek lekce
+            if ($lekce) { // pokud uz nejaka skoncila
+              // test predchozi lekce
+            } else { // prvni lekce
+              // reset pozdeji
+            }
+
+            $url = url('node/' . $p->nid);
+            $lekce = $p;
         }
 
         $pathpoints[] = array(
             'type' => $p->type === 'lekce' ? 'test' : 'default',
             'url' => $url,
+            'done' => $done,
+        );
+    }
+
+    // nastav prvni bod cesty na aktualni tema
+    $pathpoints[0] = array(
+        'type' => 'default',
+        'done' => true,
+        'url' => url('node/' . $tema->nid),
+    );
+
+    // pridej test pro posledni lekci
+    if ($lekce) {
+        $pathpoints[] = array(
+            'type' => 'test',
+            'done' => false,
+            'url' => url('node/' . $lekce->nid),
         );
     }
 
@@ -969,4 +1005,20 @@ function cesta_metapath_config($tema, $lekce, $dir) {
 
         'pathpoints' => $pathpoints,
     );
+}
+
+function cestina_nastav_ukol_done($nid) {
+    global $user;
+
+    if (isset($user->data[UKOLY_USER_KEY])) {
+      $ukoly = json_decode($user->data[UKOLY_USER_KEY], true);
+    } else {
+      $ukoly = array();
+    }
+
+    if (!isset($ukoly[$nid])) {
+      $ukoly[$nid] = true;
+      $user->data[UKOLY_USER_KEY] = json_encode($ukoly);
+      user_save($user);
+    }
 }

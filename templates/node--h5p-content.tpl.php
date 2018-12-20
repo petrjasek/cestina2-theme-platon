@@ -23,6 +23,7 @@ $ukoly = cestina_ukoly_vse($tema);
 
 <?php
 $ukoly_index = array_search($node->nid, $ukoly);
+cestina_nastav_ukol_done($node->nid);
 ?>
 
 <?php
