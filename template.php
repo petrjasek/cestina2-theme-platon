@@ -922,6 +922,29 @@ function cesta_asset($path, $directory) {
     return base_path() . $directory . CESTA_DIST . '/assets/' . $path;
 }
 
+function cesta_asset_scene($scene, $file, $directory) {
+    $path = '/scene/' . $scene . '/' . $file;
+    return cesta_asset($path, $directory);
+}
+
+function get_scene($tema) {
+    if (isset($tema->field_scena) && !empty($tema->field_scena)) {
+        return $tema->field_scena['und'][0]['value'];
+    }
+
+    return 'pastva';
+}
+
+function cesta_asset_scene_player($tema, $directory) {
+    $scene = get_scene($tema);
+    return cesta_asset_scene($scene, 'player.png', $directory);
+}
+
+function cesta_asset_scene_bg($tema, $directory) {
+    $scene = get_scene($tema);
+    return cesta_asset_scene($scene, $scene . '-bg.jpg', $directory);
+}
+
 function print_json($data) {
     print(json_encode($data, JSON_PRETTY_PRINT));
 }
@@ -989,8 +1012,8 @@ function cesta_metapath_config($tema, $lekce, $dir) {
     return array(
         'pathId' => 'seznamovani',
 
-        'backgroundImageUrl' => cesta_asset('/scene/pastva/pastva-bg.jpg', $dir),
-        'playerAnimationUrl' => cesta_asset('/scene/pastva/player.png', $dir),
+        'backgroundImageUrl' => cesta_asset_scene_bg($tema, $dir),
+        'playerAnimationUrl' => cesta_asset_scene_player($tema, $dir),
 
         'path' => array(
             'color' => '#d8bcb0',

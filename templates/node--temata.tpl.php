@@ -27,7 +27,7 @@ $lekce = cestina_lekce($node);
 ?>
 
 <script>
-var metapathConfig = <?php print json_encode(cesta_metapath_config($node, $lekce, $directory)); ?>;
+var metapathConfig = <?php print json_encode(cesta_metapath_config($node, $lekce, $directory), JSON_PRETTY_PRINT); ?>;
 </script>
 
 <script type="text/javascript" src="<?php print cesta_dist('runtime.*.js', $directory); ?>"></script>
