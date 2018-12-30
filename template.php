@@ -952,10 +952,12 @@ function print_json($data) {
 function cesta_metapath_config($tema, $lekce, $dir) {
     global $user;
 
+    $startindex = 0;
     $pathpoints = array();
     $ukoly_done = isset($user->data[UKOLY_USER_KEY]) ? json_decode($user->data[UKOLY_USER_KEY], true) : array();
 
     $lekce = null;
+    $unfinished = false;
     foreach(cestina_path($tema) as $p) {
         $url = null;
         $done = false;
@@ -974,16 +976,25 @@ function cesta_metapath_config($tema, $lekce, $dir) {
             if ($url === null) { // vsechny ukoly hotove
               $url = url('node/' . $ukoly[0]->nid);
               $done = true;
+              if (!$unfinished) {
+                $startindex++;
+              }
+            } else { // nedokoncena lekce, dal uz se startindex neposune
+              $unfinished = true;
             }
         } else { // zacatek lekce
             if ($lekce) { // pokud uz nejaka skoncila
-              // test predchozi lekce
-            } else { // prvni lekce
-              // reset pozdeji
+              // todo: test predchozi lekce
+              $url = url('node/' . $p->nid);
+            } else { // prvni lekce, prvni bod
+              // noop
             }
 
-            $url = url('node/' . $p->nid);
             $lekce = $p;
+        }
+
+        if ($url === null) { // preskoci prvni bod
+          continue;
         }
 
         $pathpoints[] = array(
@@ -993,14 +1004,7 @@ function cesta_metapath_config($tema, $lekce, $dir) {
         );
     }
 
-    // nastav prvni bod cesty na aktualni tema
-    $pathpoints[0] = array(
-        'type' => 'default',
-        'done' => true,
-        'url' => url('node/' . $tema->nid),
-    );
-
-    // pridej test pro posledni lekci
+    // pridej nakonec test pro posledni lekci
     if ($lekce) {
         $pathpoints[] = array(
             'type' => 'test',
@@ -1011,6 +1015,7 @@ function cesta_metapath_config($tema, $lekce, $dir) {
 
     return array(
         'pathId' => 'seznamovani',
+        'startindex' => $startindex,
 
         'backgroundImageUrl' => cesta_asset_scene_bg($tema, $dir),
         'playerAnimationUrl' => cesta_asset_scene_player($tema, $dir),
