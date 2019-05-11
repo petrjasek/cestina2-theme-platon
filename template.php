@@ -984,7 +984,7 @@ function cesta_metapath_config($tema, $lekce, $dir) {
         } else { // zacatek lekce
             if ($lekce) { // pokud uz nejaka skoncila
               // todo: test predchozi lekce
-              $url = url('node/' . $p->nid);
+              // $url = url('node/' . $p->nid);
             } else { // prvni lekce, prvni bod
               // noop
             }
