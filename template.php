@@ -908,11 +908,10 @@ function cestina_ukoly_vse($tema) {
     return $ukoly;
 }
 
-const CESTA_DIST = '/node_modules/metaPathComponentDist/dist/elementsApp/';
+const CESTA_DIST = '/elementsApp/';
 const UKOLY_USER_KEY = 'cestina_ukoly';
 
 function cesta_dist($pattern, $directory) {
-    $dist = '/node_modules/metaPathComponentDist/dist/elementsApp/';
     foreach(glob(dirname(__file__) . CESTA_DIST. $pattern) as $file) {
         return base_path() . $directory . CESTA_DIST . basename($file);
     }

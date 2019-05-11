@@ -31,6 +31,8 @@ var metapathConfig = <?php print json_encode($config, JSON_PRETTY_PRINT); ?>;
 
 <script type="text/javascript" src="<?php print cesta_dist('runtime.*.js', $directory); ?>"></script>
 <script type="text/javascript" src="<?php print cesta_dist('polyfills.*.js', $directory); ?>"></script>
+<script type="text/javascript" src="<?php print cesta_dist('styles.*.js', $directory); ?>"></script>
 <script type="text/javascript" src="<?php print cesta_dist('scripts.*.js', $directory); ?>"></script>
+<script type="text/javascript" src="<?php print cesta_dist('vendor.*.js', $directory); ?>"></script>
 <script type="text/javascript" src="<?php print cesta_dist('main.*.js', $directory); ?>"></script>
 

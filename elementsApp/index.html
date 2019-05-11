@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="aspectx=device-aspectx, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+<link rel="stylesheet" href="styles.3ff695c00d717f2d2a11.css"></head>
+
+<body>
+
+<script>
+
+  // sample config with dummy layers
+
+  var metapathConfig = {
+
+    pathId: 'seznamovani',
+
+    backgroundImageUrl: '/assets/scene/pastva/pastva-bg.jpg',
+    playerAnimationUrl: '/assets/scene/pastva/player.png',
+
+    path: {
+      color: '#d8bcb0',
+      outline: '#89756e',
+      pinNext: '#d8d16b',
+      pinPrev: '#7a8868',
+      pinCurrent: '#d88e55'
+    },
+
+    layers: [
+      {layer: 'butterfly', asset: '/assets/tmp/sprite150.jpg', anim: 'left-right', position: {x: 0, y: 600}},
+      {layer: 'butterfly', asset: '/assets/tmp/sprite3x150.png', anim: 'right-left', spriteanim: true},
+      {
+        layer: 'butterfly',
+        asset: '/assets/tmp/sprite3x150.jpg',
+        anim: 'none',
+        position: {x: 200, y: 400},
+        spriteanim: true
+      },
+      {
+        layer: 'butterfly',
+        asset: '/assets/tmp/sprite3x150.jpg',
+        anim: 'left-blip',
+        position: {y: 400},
+        spriteanim: true
+      },
+      {
+        layer: 'butterfly',
+        asset: '/assets/tmp/sprite3x150.jpg',
+        anim: 'right-blip',
+        position: {y: 200},
+        spriteanim: true
+      },
+    ],
+
+    pathpoints: [
+      {type: 'default', url: 'http://www.seznam.cz', done: true},
+      {type: 'default', url: 'http://www.google.cz', done: true},
+      {type: 'test', url: 'url3', done: true},
+      {type: 'default', url: 'url4', done: true},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL',done: false},
+      {type: 'default', url: 'pointURL',done: false},
+      {type: 'default', url: 'pointURL',done: false},
+      {type: 'default', url: 'pointURL',done: false},
+      {type: 'default', url: 'pointURL',done: false},
+      {type: 'default', url: 'pointURL',done: false},
+      {type: 'default', url: 'pointURL',done: false},
+      {type: 'default', url: 'pointURL',done: false},
+      {type: 'default', url: 'pointURL',done: false}
+    ]
+  };
+
+
+  // sample config with
+
+  var metapathConfigDzungle = {
+
+    pathId: 'dzungle',
+
+    backgroundImageUrl: '/assets/scene/dzungle/dzungle-bg.jpg',
+    playerAnimationUrl: '/assets/scene/dzungle/player.png',
+
+
+    path: {
+      color: '#d8d62c',
+      outline: '#89756e',
+      pinNext: '#d8d16b',
+      pinPrev: '#7a8868',
+      pinCurrent: '#d88e55'
+    },
+
+    pathpoints: [
+      {type: 'test', url: 'http://www.seznam.cz', done: true},
+      {type: 'default', url: 'http://www.google.cz', done: true},
+      {type: 'test', url: 'url3', done: true},
+      {type: 'default', url: 'url4', done: true},
+      {type: 'default', url: 'pointURL', done: true},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'test', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+      {type: 'default', url: 'pointURL', done: false},
+    ],
+
+    prevScreenUrl: 'http://www.google.com',
+    nextScreenUrl: 'http://www.seznam.cz',
+
+    help: {
+      enabled: true,
+      button: 'Pomoc',
+      headline: 'Pomoc',
+      text: 'Klikej po cestě na body,plň úkoly. Doběhni se zvířátkem na konec cesty vzdělání',
+      close: 'zavřít',
+      imageUrl: '/assets/scene/dzungle/player.png'
+    }
+
+  }
+
+</script>
+
+<meta-path config="metapathConfigDzungle" startindex="3" redirect="false"></meta-path>
+<script type="text/javascript" src="runtime.a66f828dca56eeb90e02.js"></script><script type="text/javascript" src="polyfills.6b96b086b25788fb0d2f.js"></script><script type="text/javascript" src="scripts.e84e36a0841a046b4d25.js"></script><script type="text/javascript" src="main.27308f9f1f4192821037.js"></script></body>
+
+</html>
