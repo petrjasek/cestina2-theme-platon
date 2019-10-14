@@ -811,23 +811,46 @@ function platon_views_view_grouping($vars) {
   return $output;
 }
 
+
 function cestina_lekce($tema) {
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'lekce')
-        ->fieldCondition('field_temataref', 'target_id', $tema->nid);
+        ->fieldCondition('field_temataref', 'target_id', $tema->nid)
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ;
 
+    $lekce = [];
+    $roviny = array("14", "17", "15", "16");
     $result = $query->execute();
     if (isset($result['node'])) {
         $items = entity_load('node', array_keys($result['node']));
-        return $items;
+        foreach ($roviny as $rovina) {
+          foreach (array_keys($items) as $id) {
+            if ($rovina === $items[$id]->field_jazykroviny['und'][0]['tid']) {
+              $lekce[] = $items[$id];
+            }
+          }
+        }
     }
 
-    return [];
+    return $lekce;
 }
 
 function cestina_tema_pro_lekci($lekce) {
     return node_load($lekce->field_temataref[LANGUAGE_NONE][0]['target_id']);
+}
+
+function weight_sort($a, $b) {
+  $a_weight = intval($a->weight_weight);
+  $b_weight = intval($b->weight_weight);
+
+  if ($a_weight == $b_weight) {
+    return 0;
+  }
+
+  // inverted logic to match editors logic
+  return $a_weight < $b_weight ? 1 : -1;
 }
 
 function cestina_cviceni($lekce) {
@@ -835,12 +858,14 @@ function cestina_cviceni($lekce) {
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'cviceni')
         ->fieldCondition('field_lekceref', 'target_id', $lekce->nid)
-        ->propertyOrderBy('title');
-
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ;
+  
     try {
         $result = $query->execute();
         if (isset($result['node'])) {
             $items = entity_load('node', array_keys($result['node']));
+            uasort($items, weight_sort);
             return $items;
         }
     } catch (Exception $e) {
@@ -852,26 +877,19 @@ function cestina_lekce_pro_cviceni($cviceni) {
     return node_load($cviceni->field_lekceref[LANGUAGE_NONE][0]['target_id']);
 }
 
-function weight_compare($a, $b) {
-    if ($a->weight_weight === $b->weight_weight) {
-        return 0;
-    }
-
-    return ($a->weight_weight > $b->weight_weight) ? -1 : 1;
-}
-
 function cestina_ukoly($cviceni) {
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'h5p_content')
-        ->fieldCondition('field_cviceni', 'target_id', $cviceni->nid);
+        ->fieldCondition('field_cviceni', 'target_id', $cviceni->nid)
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ;
 
     try {
         $result = $query->execute();
         if (isset($result['node'])) {
             $items = entity_load('node', array_keys($result['node']));
-            $items = array_values($items);
-            usort($items, weight_compare);
+            uasort($items, weight_sort);
             return $items;
         }
     } catch (Exception $e) {
