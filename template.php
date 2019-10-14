@@ -813,25 +813,26 @@ function platon_views_view_grouping($vars) {
 
 
 function cestina_lekce($tema) {
-    $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'lekce')
-        ->fieldCondition('field_temataref', 'target_id', $tema->nid)
-        ->propertyCondition('status', NODE_PUBLISHED)
-        ;
-
     $lekce = [];
     $roviny = array("14", "17", "15", "16");
-    $result = $query->execute();
-    if (isset($result['node'])) {
-        $items = entity_load('node', array_keys($result['node']));
-        foreach ($roviny as $rovina) {
+    foreach ($roviny as $rovina) {
+      $query = new EntityFieldQuery();
+      $query->entityCondition('entity_type', 'node')
+          ->entityCondition('bundle', 'lekce')
+          ->fieldCondition('field_temataref', 'target_id', $tema->nid)
+          ->fieldCondition('field_jazykroviny', 'tid', $rovina)
+          ->propertyCondition('status', NODE_PUBLISHED)
+          ;
+
+      $result = $query->execute();
+      if (isset($result['node'])) {
+          $items = entity_load('node', array_keys($result['node']));
+          uasort($items, weight_sort);
           foreach (array_keys($items) as $id) {
-            if ($rovina === $items[$id]->field_jazykroviny['und'][0]['tid']) {
-              $lekce[] = $items[$id];
-            }
+              $lekce[$id] = $items[$id];
+              var_dump($items[$id]->title);
           }
-        }
+      }
     }
 
     return $lekce;
