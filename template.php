@@ -1022,19 +1022,19 @@ function cesta_metapath_config($tema, $lekce, $dir) {
     }
 
     // pridej nakonec test pro posledni lekci
-    if ($lekce) {
-        $pathpoints[] = array(
-            'type' => 'test',
-            'done' => false,
-            'url' => url('node/' . $lekce->nid),
-        );
-    }
+ //   if ($lekce) {
+ //       $pathpoints[] = array(
+ //           'type' => 'test',
+ //           'done' => false,
+ //           'url' => url('node/' . $lekce->nid),
+  //      );
+  //  }
 
     return array(
         'pathId' => 'seznamovani',
         'startindex' => $startindex,
 
-        'backgroundImageUrl' => cesta_asset_scene_bg($tema, $dir),
+     //   'backgroundImageUrl' => cesta_asset_scene_bg($tema, $dir),
         'playerAnimationUrl' => cesta_asset_scene_player($tema, $dir),
 
         'path' => array(
