@@ -830,7 +830,6 @@ function cestina_lekce($tema) {
           uasort($items, weight_sort);
           foreach (array_keys($items) as $id) {
               $lekce[$id] = $items[$id];
-              var_dump($items[$id]->title);
           }
       }
     }
