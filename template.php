@@ -986,7 +986,7 @@ function cesta_metapath_config($tema, $lekce, $dir) {
         $done = false;
 
         if ($p->type === 'cviceni') { // pro cviceni vyber prvni nehotovy ukol
-            $ukoly = cestina_ukoly($p);
+            $ukoly = array_values(cestina_ukoly($p));
             foreach ($ukoly as $ukol) {
                 if (isset($ukoly_done[$ukol->nid])) {
                     continue;
