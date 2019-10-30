@@ -903,12 +903,18 @@ function cestina_cviceni_pro_ukol($ukol) {
 
 function cestina_path($tema) {
     $path = [];
+    echo "<!-- PATH:\n";
     foreach(cestina_lekce($tema) as $l) {
         $path[] = $l;
+        echo "- " . $l->title . " " . $l->weight_weight . "\n";
         foreach(cestina_cviceni($l) as $c) {
             $path[] = $c;
+            echo "-- " . $c->title . " " . $c->weight_weight . "\n";
         }
+        echo "\n";
     }
+
+    echo "-->";
 
     return $path;
 }
