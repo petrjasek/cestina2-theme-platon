@@ -1024,6 +1024,7 @@ function cesta_metapath_config($tema, $lekce, $dir) {
             'type' => $p->type === 'lekce' ? 'test' : 'default',
             'url' => $url,
             'done' => $done,
+            'title' => $p->title,
         );
     }
 
