@@ -1020,6 +1020,17 @@ function cesta_metapath_config($tema, $lekce, $dir) {
           continue;
         }
 
+        // pridej pred prvni bod jedno noop policko,
+        // prvni bod cesty nejde vybrat kdyz na nem stoji
+        if (sizeof($pathpoints) === 0) {
+          $pathpoints[] = array(
+            'url' => '',
+            'type' => 'default',
+            'done' => false,
+            'title' => 'Start',
+          );
+        }
+
         $pathpoints[] = array(
             'type' => $p->type === 'lekce' ? 'test' : 'default',
             'url' => $url,
